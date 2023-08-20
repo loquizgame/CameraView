@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import java.util.Locale;
+
 /**
  * A {@link VideoRecorder} that uses {@link android.media.MediaRecorder} APIs.
  *
@@ -127,7 +129,7 @@ public abstract class FullVideoRecorder extends VideoRecorder {
         if (stub.audioBitRate <= 0 && hasAudio) stub.audioBitRate = mProfile.audioBitRate;
 
         // 5. Update the VideoResult stub with DeviceEncoders constraints
-        if (applyEncodersConstraints) {
+        if (applyEncodersConstraints && !Build.BRAND.toLowerCase(Locale.ROOT).equals("redmi")) {
             // A. Get the audio mime type
             // https://android.googlesource.com/platform/frameworks/av/+/master/media/libmediaplayerservice/StagefrightRecorder.cpp#1096
             // https://github.com/MrAlex94/Waterfox-Old/blob/master/media/libstagefright/frameworks/av/media/libstagefright/MediaDefs.cpp
