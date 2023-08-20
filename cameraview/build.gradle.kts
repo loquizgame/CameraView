@@ -42,36 +42,15 @@ dependencies {
 
 // Publishing
 
-publisher {
-    project.description = "A well documented, high-level Android interface that makes capturing " +
-            "pictures and videos easy, addressing all of the common issues and needs. " +
-            "Real-time filters, gestures, watermarks, frame processing, RAW, output of any size."
-    project.artifact = "cameraview"
-    project.group = "com.loquiz"
-    project.url = "https://github.com/loquizgame/CameraView"
-    project.scm = GithubScm("loquizgame", "CameraView")
-    project.addLicense(License.APACHE_2_0)
-    project.addDeveloper("loquizgame", "")
-    release.sources = Release.SOURCES_AUTO
-    release.docs = Release.DOCS_AUTO
-    release.version = "2.7.4"
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            version = "2.7.5"
 
-    directory()
-
-    sonatype {
-        auth.user = "SONATYPE_USER"
-        auth.password = "SONATYPE_PASSWORD"
-        signing.key = "SIGNING_KEY"
-        signing.password = "SIGNING_PASSWORD"
-    }
-
-    sonatype("snapshot") {
-        repository = io.deepmedia.tools.publisher.sonatype.Sonatype.OSSRH_SNAPSHOT_1
-        release.version = "latest-SNAPSHOT"
-        auth.user = "SONATYPE_USER"
-        auth.password = "SONATYPE_PASSWORD"
-        signing.key = "SIGNING_KEY"
-        signing.password = "SIGNING_PASSWORD"
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
     }
 }
 
