@@ -47,14 +47,14 @@ publisher {
             "pictures and videos easy, addressing all of the common issues and needs. " +
             "Real-time filters, gestures, watermarks, frame processing, RAW, output of any size."
     project.artifact = "cameraview"
-    project.group = "com.otaliastudios"
-    project.url = "https://github.com/natario1/CameraView"
-    project.scm = GithubScm("natario1", "CameraView")
+    project.group = "com.loquiz"
+    project.url = "https://github.com/loquizgame/CameraView"
+    project.scm = GithubScm("loquizgame", "CameraView")
     project.addLicense(License.APACHE_2_0)
-    project.addDeveloper("natario1", "mat.iavarone@gmail.com")
+    project.addDeveloper("loquizgame", "")
     release.sources = Release.SOURCES_AUTO
     release.docs = Release.DOCS_AUTO
-    release.version = "2.7.3"
+    release.version = "2.7.4"
 
     directory()
 
