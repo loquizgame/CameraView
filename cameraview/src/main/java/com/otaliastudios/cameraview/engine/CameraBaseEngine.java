@@ -94,6 +94,10 @@ public abstract class CameraBaseEngine extends CameraEngine {
     private int mFrameProcessingPoolSize;
     private Overlay mOverlay;
 
+    File file;
+    FileDescriptor fileDescriptor;
+    VideoResult.Stub stub;
+
     // Ops used for testing.
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED) Task<Void> mZoomTask
             = Tasks.forResult(null);
@@ -577,6 +581,10 @@ public abstract class CameraBaseEngine extends CameraEngine {
     public final void takeVideo(final @NonNull VideoResult.Stub stub,
                                 final @Nullable File file,
                                 final @Nullable FileDescriptor fileDescriptor) {
+        this.stub = stub;
+        this.file = file;
+        this.fileDescriptor = fileDescriptor;
+
         getOrchestrator().scheduleStateful("take video", CameraState.BIND, new Runnable() {
             @Override
             public void run() {

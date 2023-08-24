@@ -39,6 +39,11 @@ public abstract class VideoRecorder {
          * and soon {@link #onVideoResult(VideoResult.Stub, Exception)} will be called.
          */
         void onVideoRecordingEnd();
+
+        /**
+         * The callback for the video start error.
+         */
+        void onVideoRecordingError();
     }
 
     private final static int STATE_IDLE = 0;
@@ -139,6 +144,32 @@ public abstract class VideoRecorder {
         }
         mResult = null;
         mError = null;
+    }
+
+    /**
+     * Subclasses can call this to notify that the video start has error,
+     * this will be called when camera is prepared and start failed.
+     */
+    @SuppressWarnings("WeakerAccess")
+    @CallSuper
+    protected void dispatchVideoRecordingError() {
+        synchronized (mStateLock) {
+            if (!isRecording()) {
+                LOG.w("dispatchVideoRecordingError:", "Called, but not recording! Aborting.");
+                return;
+            }
+            LOG.i("dispatchVideoRecordingError:", "Changed state to STATE_IDLE.");
+            mState = STATE_IDLE;
+        }
+        onDispatchResult();
+        LOG.i("dispatchVideoRecordingError:", "About to dispatch result:", mResult, mError);
+        mResult = null;
+        mError = null;
+
+        LOG.i("dispatchVideoRecordingError:", "About to dispatch.");
+        if (mListener != null) {
+            mListener.onVideoRecordingError();
+        }
     }
 
     /**

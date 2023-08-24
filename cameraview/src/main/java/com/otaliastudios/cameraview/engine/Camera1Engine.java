@@ -9,10 +9,12 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.location.Location;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.google.android.gms.tasks.Task;
@@ -64,11 +66,15 @@ public class Camera1Engine extends CameraBaseEngine implements
     private static final String JOB_FOCUS_END = "focus end";
 
     private static final int PREVIEW_FORMAT = ImageFormat.NV21;
-    @VisibleForTesting static final int AUTOFOCUS_END_DELAY_MILLIS = 2500;
+    @VisibleForTesting
+    static final int AUTOFOCUS_END_DELAY_MILLIS = 2500;
+
+    boolean forceSkipEncoders = false;
 
     private final Camera1Mapper mMapper = Camera1Mapper.get();
     private Camera mCamera;
-    @VisibleForTesting int mCameraId;
+    @VisibleForTesting
+    int mCameraId;
 
     public Camera1Engine(@NonNull Callback callback) {
         super(callback);
@@ -422,7 +428,7 @@ public class Camera1Engine extends CameraBaseEngine implements
             onVideoResult(null, e);
             return;
         }
-        mVideoRecorder = new Full1VideoRecorder(Camera1Engine.this, mCamera, mCameraId);
+        mVideoRecorder = new Full1VideoRecorder(Camera1Engine.this, mCamera, mCameraId, forceSkipEncoders);
         mVideoRecorder.start(stub);
     }
 
@@ -470,6 +476,17 @@ public class Camera1Engine extends CameraBaseEngine implements
             // Something went wrong, lock the camera again.
             mCamera.lock();
         }
+    }
+
+    @Override
+    public void onVideoRecordingError() {
+        if (!forceSkipEncoders) {
+            mVideoRecorder = null;
+            mCamera.lock();
+            forceSkipEncoders = true;
+            takeVideo(stub, file, fileDescriptor);
+        }
+
     }
 
     //endregion

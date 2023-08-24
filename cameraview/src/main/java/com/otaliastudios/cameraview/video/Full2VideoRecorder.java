@@ -30,8 +30,8 @@ public class Full2VideoRecorder extends FullVideoRecorder {
     private final String mCameraId;
     private Surface mInputSurface;
 
-    public Full2VideoRecorder(@NonNull Camera2Engine engine, @NonNull String cameraId) {
-        super(engine);
+    public Full2VideoRecorder(@NonNull Camera2Engine engine, @NonNull String cameraId, boolean forceSkipEncoders) {
+        super(engine, forceSkipEncoders);
         mHolder = engine;
         mCameraId = cameraId;
     }

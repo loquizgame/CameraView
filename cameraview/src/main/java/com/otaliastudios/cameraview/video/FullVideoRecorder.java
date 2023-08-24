@@ -39,10 +39,11 @@ public abstract class FullVideoRecorder extends VideoRecorder {
     @SuppressWarnings("WeakerAccess") protected MediaRecorder mMediaRecorder;
     private CamcorderProfile mProfile;
     private boolean mMediaRecorderPrepared;
+    private final boolean forceSkipEncoders;
 
-
-    FullVideoRecorder(@Nullable VideoResultListener listener) {
+    FullVideoRecorder(@Nullable VideoResultListener listener, boolean forceSkipEncoders) {
         super(listener);
+        this.forceSkipEncoders = forceSkipEncoders;
     }
 
     /**
@@ -129,7 +130,7 @@ public abstract class FullVideoRecorder extends VideoRecorder {
         if (stub.audioBitRate <= 0 && hasAudio) stub.audioBitRate = mProfile.audioBitRate;
 
         // 5. Update the VideoResult stub with DeviceEncoders constraints
-        if (applyEncodersConstraints && !Build.BRAND.toLowerCase(Locale.ROOT).equals("redmi")) {
+        if (!forceSkipEncoders && applyEncodersConstraints) {
             // A. Get the audio mime type
             // https://android.googlesource.com/platform/frameworks/av/+/master/media/libmediaplayerservice/StagefrightRecorder.cpp#1096
             // https://github.com/MrAlex94/Waterfox-Old/blob/master/media/libstagefright/frameworks/av/media/libstagefright/MediaDefs.cpp
@@ -358,7 +359,12 @@ public abstract class FullVideoRecorder extends VideoRecorder {
         mProfile = null;
         mMediaRecorder = null;
         mMediaRecorderPrepared = false;
-        dispatchResult();
-    }
 
+        if (!forceSkipEncoders && this instanceof Full1VideoRecorder) {
+            LOG.i("start:", "Skip encoders and try to start again.");
+            dispatchVideoRecordingError();
+        }else {
+            dispatchResult();
+        }
+    }
 }

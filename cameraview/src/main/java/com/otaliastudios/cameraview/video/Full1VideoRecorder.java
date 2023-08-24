@@ -22,8 +22,8 @@ public class Full1VideoRecorder extends FullVideoRecorder {
     private final int mCameraId;
 
     public Full1VideoRecorder(@NonNull Camera1Engine engine,
-                              @NonNull Camera camera, int cameraId) {
-        super(engine);
+                              @NonNull Camera camera, int cameraId, boolean forceSkipEncoders) {
+        super(engine, forceSkipEncoders);
         mCamera = camera;
         mEngine = engine;
         mCameraId = cameraId;

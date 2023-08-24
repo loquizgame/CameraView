@@ -526,7 +526,7 @@ public class Camera2Engine extends CameraBaseEngine implements
         // 2. VIDEO RECORDING
         if (getMode() == Mode.VIDEO) {
             if (mFullVideoPendingStub != null) {
-                Full2VideoRecorder recorder = new Full2VideoRecorder(this, mCameraId);
+                Full2VideoRecorder recorder = new Full2VideoRecorder(this, mCameraId, false);
                 try {
                     outputSurfaces.add(recorder.createInputSurface(mFullVideoPendingStub));
                 } catch (Full2VideoRecorder.PrepareException e) {
@@ -966,6 +966,11 @@ public class Camera2Engine extends CameraBaseEngine implements
             try { Thread.sleep(600); } catch (InterruptedException ignore) {}
             LOG.w("Applied the Issue549 workaround. Slept!");
         }
+    }
+
+    @Override
+    public void onVideoRecordingError() {
+
     }
 
     @Override
