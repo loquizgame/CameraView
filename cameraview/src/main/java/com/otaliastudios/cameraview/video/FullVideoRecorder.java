@@ -40,6 +40,7 @@ public abstract class FullVideoRecorder extends VideoRecorder {
     private CamcorderProfile mProfile;
     private boolean mMediaRecorderPrepared;
     private final boolean forceSkipEncoders;
+    private boolean hasCameraStartError;
 
     FullVideoRecorder(@Nullable VideoResultListener listener, boolean forceSkipEncoders) {
         super(listener);
@@ -314,9 +315,11 @@ public abstract class FullVideoRecorder extends VideoRecorder {
         }
 
         try {
+            hasCameraStartError = false;
             mMediaRecorder.start();
             dispatchVideoRecordingStart();
         } catch (Exception e) {
+            hasCameraStartError = true;
             LOG.w("start:", "Error while starting media recorder.", e);
             mResult = null;
             mError = e;
@@ -360,8 +363,7 @@ public abstract class FullVideoRecorder extends VideoRecorder {
         mMediaRecorder = null;
         mMediaRecorderPrepared = false;
 
-        if (!forceSkipEncoders && this instanceof Full1VideoRecorder) {
-            LOG.i("start:", "Skip encoders and try to start again.");
+        if (hasCameraStartError && !forceSkipEncoders && this instanceof Full1VideoRecorder) {
             dispatchVideoRecordingError();
         }else {
             dispatchResult();

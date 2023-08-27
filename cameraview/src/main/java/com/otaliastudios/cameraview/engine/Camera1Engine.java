@@ -69,8 +69,6 @@ public class Camera1Engine extends CameraBaseEngine implements
     @VisibleForTesting
     static final int AUTOFOCUS_END_DELAY_MILLIS = 2500;
 
-    boolean forceSkipEncoders = false;
-
     private final Camera1Mapper mMapper = Camera1Mapper.get();
     private Camera mCamera;
     @VisibleForTesting
@@ -486,7 +484,6 @@ public class Camera1Engine extends CameraBaseEngine implements
             forceSkipEncoders = true;
             takeVideo(stub, file, fileDescriptor);
         }
-
     }
 
     //endregion

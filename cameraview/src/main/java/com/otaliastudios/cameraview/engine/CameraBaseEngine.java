@@ -94,6 +94,8 @@ public abstract class CameraBaseEngine extends CameraEngine {
     private int mFrameProcessingPoolSize;
     private Overlay mOverlay;
 
+    boolean forceSkipEncoders = false;
+
     File file;
     FileDescriptor fileDescriptor;
     VideoResult.Stub stub;
