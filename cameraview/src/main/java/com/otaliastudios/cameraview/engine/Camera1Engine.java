@@ -493,7 +493,9 @@ public class Camera1Engine extends CameraBaseEngine implements
     private void applyAllParameters(@NonNull Camera.Parameters params) {
         params.setRecordingHint(getMode() == Mode.VIDEO);
         applyDefaultFocus(params);
-        applyFlash(params, Flash.OFF);
+        if (params.getSupportedFlashModes() != null) {
+            applyFlash(params, Flash.OFF);
+        }
         applyLocation(params, null);
         applyWhiteBalance(params, WhiteBalance.AUTO);
         applyHdr(params, Hdr.OFF);
@@ -539,7 +541,9 @@ public class Camera1Engine extends CameraBaseEngine implements
             @Override
             public void run() {
                 Camera.Parameters params = mCamera.getParameters();
-                if (applyFlash(params, old)) mCamera.setParameters(params);
+                if (params.getSupportedFlashModes() != null) {
+                    if (applyFlash(params, old)) mCamera.setParameters(params);
+                }
             }
         });
     }
