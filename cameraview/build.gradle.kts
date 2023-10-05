@@ -45,7 +45,7 @@ dependencies {
 publishing {
     publications {
         register<MavenPublication>("release") {
-            version = "2.7.7"
+            version = "2.7.8"
 
             afterEvaluate {
                 from(components["release"])
